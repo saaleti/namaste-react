@@ -1,19 +1,17 @@
 .header {
-    border: 10px black;
-    flex-flow: wrap;
+  border: 10px black;
+  flex-flow: wrap;
 }
 
-.logo{
-    width: 10%;
+.logo {
+  width: 10%;
 }
 
 .menuItems > ul > li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .restoContainer {
-border: 10px black;
-border-color: black;
-
+  border: 10px black;
+  border-color: black;
 }
-

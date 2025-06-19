@@ -1,14 +1,14 @@
 const RestoContainer = (props) => {
+  const { name, cuisines, costForTwo, avgRating } = props?.restObj?.info;
 
-   const {name, cuisine, costEstimateForTwo} = props?.restObj;
-
- 
-   return <div className="restoContainer">
-         <span>{name}</span>
-         <h4>{cuisine}</h4>
-         <h4>{costEstimateForTwo}</h4>
-      </div>
-
+  return (
+    <div className="restoContainer">
+      <span>{name}</span>
+      <h4>{cuisines}</h4>
+      <h4>{costForTwo}</h4>
+      <h4>Rating {avgRating}</h4>
+    </div>
+  );
 };
 
 export default RestoContainer;
