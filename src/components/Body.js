@@ -1,38 +1,29 @@
 import RestoContainer from "./RestoContainer";
 import { useEffect, useState } from "react";
+import { SWIGGY_API } from "../utils/constants";
 
 const Body = () => {
-  const restaurents = [
-    {
-      name: "Meghana Foods",
-      cuisine: ["Chineese", "Indian"],
-      costEstimateForTwo: 400,
-      rating: "4.5",
-    },
-    {
-      name: "KFC",
-      cuisine: ["Fastfood"],
-      costEstimateForTwo: 1000,
-      rating: "3.9",
-    },
-  ];
-
   const [restaurentsWithState, SetRestaurentsWithState] = useState([]);
+  const [filteredRestaurentState, SetFilteredRestaurentState] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.3697893&lng=78.3991533&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-    const json = await data.json();
-    console.log(json);
-    const swiggyRestaurents =
-      json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants;
-    console.log(swiggyRestaurents);
-    SetRestaurentsWithState(swiggyRestaurents);
+    try {
+      const data = await fetch(SWIGGY_API);
+      const json = await data.json();
+      console.log(json);
+      const swiggyRestaurents =
+        json.data.cards[4].card.card.gridElements.infoWithStyle.restaurants;
+      console.log(swiggyRestaurents);
+      SetRestaurentsWithState(swiggyRestaurents);
+      SetFilteredRestaurentState(swiggyRestaurents);
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   console.log(restaurentsWithState);
@@ -41,19 +32,29 @@ const Body = () => {
     <h1> Loading 2... </h1>
   ) : (
     <div>
+      <input
+        type="text"
+        className="searchInput"
+        value={searchInput}
+        onChange={(e) => {
+          setSearchInput(e.target.value);
+        }}
+      ></input>
       <button
         onClick={() => {
           console.log("Restaurent with state " + restaurentsWithState);
+          console.log("Search Input Passed" + searchInput);
           const filteredList = restaurentsWithState.filter(
-            (r) => r?.info?.avgRating > 4
+            (r) => r?.info?.name == searchInput
           );
-          console.log("Filtered list is" + filteredList);
-          SetRestaurentsWithState(filteredList);
+          console.log("Filtered list is");
+          console.log(filteredList);
+          SetFilteredRestaurentState(filteredList);
         }}
       >
-        Click me
+        Search
       </button>
-      {restaurentsWithState.map((resturent) => (
+      {filteredRestaurentState.map((resturent) => (
         <RestoContainer key={resturent.id} restObj={resturent} />
       ))}
     </div>
